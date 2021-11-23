@@ -1,1 +1,1 @@
-add_library(opcOperand opcOperand.cpp)
+add_library(c_reginst opcOperand.cpp ibeSet.cpp)
