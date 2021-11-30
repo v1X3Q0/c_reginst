@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "opcOperand.h"
 #include <hdeA64.h>
+#include <localUtil.h>
+
+#include "opcOperand.h"
 
 cOperand::cOperand() : fixvar_set(e_rd | e_rn | e_imms | e_immr | e_immLarge)
 {
