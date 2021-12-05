@@ -98,6 +98,7 @@ public:
             lop.opcode, rt, 0, 0, 0, imm19);
     }
 
+    // create add subtract immediate
     template <typename fv_rd, typename fv_rn, typename fv_imm12>
     static cOperand* createASI(fv_rd rd, fv_rn rn, fv_imm12 imm12)
     {
