@@ -26,7 +26,7 @@ typedef struct
 {
     val_set_t val_set;
     cOperand* regRand;
-} saveVar_t;
+} saveVar, *saveVar_t;
 
 class cOperand
 {
@@ -50,7 +50,7 @@ public:
 
     // case for adding a variable size_t, inwhich we just are adding a * to a **
     // template<typename T>
-    void fixvar_add(size_t* targetVar, saveVar_t* var_member, val_set_t e_index);
+    void fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index);
 
     void clearVars();
 
@@ -96,6 +96,17 @@ public:
 
         return insertToGlob<fv_rt, size_t, size_t, size_t, fv_imm19>(
             lop.opcode, rt, 0, 0, 0, imm19);
+    }
+
+    // create load register unsigned immediate
+    template <typename fv_rt, typename fv_rn, typename fv_imm12>
+    static cOperand* createLDRB(fv_rt rt, fv_rn rn, fv_imm12 imm12)
+    {
+        hdea64_opcode lop = {0};
+        ENCODE_OP2_INST(lop, LS, RI, NULL, UIMM);
+
+        return insertToGlob<fv_rt, fv_rn, size_t, size_t, fv_imm12>(
+            lop.opcode, rt, rn, 0, 0, imm12);
     }
 
     // create add subtract immediate

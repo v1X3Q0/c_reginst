@@ -73,7 +73,7 @@ void cOperand::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_inde
 
 // case for adding a variable size_t, inwhich we just are adding a * to a **
 // template<typename T>
-void cOperand::fixvar_add(size_t* targetVar, saveVar_t* var_member, val_set_t e_index)
+void cOperand::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index)
 {
     var_member->regRand = this;
     var_member->val_set = e_index;

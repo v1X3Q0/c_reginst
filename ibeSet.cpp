@@ -29,28 +29,28 @@ void instSet::clearInternals()
     }
 }
 
-saveVar_t* instSet::checkOperand(uint32_t newOperand)
+saveVar_t instSet::checkOperand(uint32_t newOperand)
 {
-    saveVar_t* result = 0;
+    saveVar_t result = 0;
     auto it = varTable.begin();
     it = varTable.find(newOperand);
     if (it == varTable.end())
     {
-        result = (saveVar_t*)calloc(1, sizeof(saveVar_t));
+        result = (saveVar_t)calloc(1, sizeof(saveVar));
         varTable[newOperand] = result;
     }
     result = varTable[newOperand];
     return result;
 }
 
-saveVar_t* instSet::addOperand(uint32_t newOperand, val_set_t val_set, cOperand* regRand)
+saveVar_t instSet::addOperand(uint32_t newOperand, val_set_t val_set, cOperand* regRand)
 {
-    saveVar_t* result = 0;
+    saveVar_t result = 0;
     auto it = varTable.begin();
     it = varTable.find(newOperand);
     if (it == varTable.end())
     {
-        result = (saveVar_t*)calloc(1, sizeof(saveVar_t));
+        result = (saveVar_t)calloc(1, sizeof(saveVar));
         result->val_set = val_set;
         result->regRand = regRand;
         varTable[newOperand] = result;
