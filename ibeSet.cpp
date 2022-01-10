@@ -98,9 +98,11 @@ void instSet::clearVars()
     }
 }
 
-int instSet::findPattern(uint32_t* startAddress, size_t sizeSearch, uint32_t** resultAddr)
+int instSet::findPattern(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a)
 {
     int result = -1;
+    uint32_t* startAddress = (uint32_t*)startAddress_a;
+    uint32_t** resultAddr = (uint32_t**)resultAddr_a;
     uint32_t* endAddress = (uint32_t*)((size_t)startAddress + sizeSearch);
     uint32_t* curAddr = startAddress;
     uint32_t* slideEnd = curAddr + instPatternList.size();
