@@ -5,11 +5,16 @@
 #include <list>
 #include <map>
 
-#include "hdeA64.h"
 #include <localUtil.h>
 
 #include <opcOperand.h>
 #include <bgrep_e.h>
+
+#ifdef LIVE_KERNEL
+#include "hdeA64.h"
+#else
+#include <capstone/capstone.h>
+#endif
 
 class instSet : public search_set
 {
