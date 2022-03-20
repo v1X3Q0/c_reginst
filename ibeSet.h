@@ -7,8 +7,8 @@
 
 #include <localUtil.h>
 
-#include <opcOperand.h>
 #include <bgrep_e.h>
+#include "opcOperand.h"
 
 #ifdef LIVE_KERNEL
 #include "hdeA64.h"

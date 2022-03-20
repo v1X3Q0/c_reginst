@@ -3,7 +3,7 @@
 
 #include <localUtil.h>
 #include "ibeSet.h"
-#include <opcOperand.h>
+#include "opcOperand.h"
 
 
 void instSet::addNewInst(cOperand* newInstruction)
