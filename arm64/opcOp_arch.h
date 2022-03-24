@@ -3,7 +3,7 @@
 
 #include "../opcOperand.h"
 
-class cOperand_aarch64 : public cOperand
+class cOperand_arm64 : public cOperand
 {
 public:
     template <typename fv_rd, typename fv_rn, typename fv_imms, typename fv_immr, typename fv_immLarge>

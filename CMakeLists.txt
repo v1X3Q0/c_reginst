@@ -13,7 +13,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 if (DEFINED LIVE_KERNEL)
     target_compile_definitions(${PROJECT_NAME} PRIVATE
         LIVE_KERNEL=${LIVE_KERNEL})
-    if (ARCH STREQUAL "arm64")
+    if (ARCH STREQUAL "arm64" OR ARCH STREQUAL "arm64e")
         target_include_directories(${PROJECT_NAME} PRIVATE
             ${ANDROID_TOOL_BASE}/common/hde_armv8)
     endif()

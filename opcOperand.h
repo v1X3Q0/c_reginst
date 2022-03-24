@@ -40,8 +40,8 @@ protected:
 // if the variable has been fixed
     uint32_t fixvar_unmod;
     uint32_t fixvar_set;
-    hde_t parsedOpcode;
 public:
+    hde_t parsedOpcode;
 // initiate it to an initialized fixed variable, that's it.
     cOperand();
 // constructor for fixed operands

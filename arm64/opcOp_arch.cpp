@@ -1,19 +1,20 @@
 #include <string.h>
 #include <hdeA64.h>
+#include <localUtil.h>
 
-#include "opcOp_aarch64.h"
+#include "opcOp_arch.h"
 
-cOperand_aarch64::cOperand_aarch64() : fixvar_set(e_rd | e_rn | e_imms | e_immr | e_immLarge)
+cOperand_arm64::cOperand_arm64() : fixvar_set(e_rd | e_rn | e_imms | e_immr | e_immLarge)
 {
     memset(&parsedOpcode, 0, sizeof(hde_t));
 }
 
-cOperand_aarch64::cOperand_aarch64(uint32_t targOp)
+cOperand_arm64::cOperand_arm64(uint32_t targOp)
 {
     parseInst(targOp, &parsedOpcode);
 }
 
-bool cOperand_aarch64::checkHelper(cOperand_aarch64* targCompare)
+bool cOperand_arm64::checkHelper(cOperand_arm64* targCompare)
 {
     bool result = false;
 
@@ -29,7 +30,7 @@ fail:
     return result;
 }
 
-int cOperand_aarch64::getOpComp(val_set_t val_set, size_t* component)
+int cOperand_arm64::getOpComp(val_set_t val_set, size_t* component)
 {
 #define EACH_CASE(INDEX) \
     case e_ ## INDEX: \
@@ -55,7 +56,7 @@ fail:
 
 // case for adding a fixed size_t 
 // template <typename T>
-void cOperand_aarch64::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index)
+void cOperand_arm64::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index)
 {
     *targetVar = (size_t)hde_member;
     fixvar_set |= e_index;
@@ -64,7 +65,7 @@ void cOperand_aarch64::fixvar_add(size_t* targetVar, size_t hde_member, val_set_
 
 // case for adding a variable size_t, inwhich we just are adding a * to a **
 // template<typename T>
-void cOperand_aarch64::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index)
+void cOperand_arm64::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index)
 {
     var_member->regRand = this;
     var_member->val_set = e_index;
