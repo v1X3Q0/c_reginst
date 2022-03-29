@@ -4,7 +4,9 @@
 #include <stdint.h>
 
 #ifdef LIVE_KERNEL
+#ifdef __arm64__
 #include <hdeA64.h>
+#endif
 #else
 #include <capstone/capstone.h>
 #include "hde_placehold.h"
