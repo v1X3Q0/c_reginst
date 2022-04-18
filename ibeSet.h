@@ -10,12 +10,6 @@
 #include <bgrep_e.h>
 #include "opcOperand.h"
 
-#ifdef LIVE_KERNEL
-#include "hdeA64.h"
-#else
-#include <capstone/capstone.h>
-#endif
-
 class instSet : public search_set
 {
 private:

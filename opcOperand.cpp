@@ -4,7 +4,7 @@
 
 #include <localUtil.h>
 
-#ifdef LIVE_KERNEL
+#ifdef __arm64__
 #include <hdeA64.h>
 #else
 #include <capstone/capstone.h>
