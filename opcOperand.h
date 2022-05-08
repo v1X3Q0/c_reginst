@@ -41,14 +41,23 @@ protected:
     uint32_t fixvar_set;
 public:
     hde_t parsedOpcode;
-// initiate it to an initialized fixed variable, that's it.
-    cOperand();
-// constructor for fixed operands
-    cOperand(uint32_t targOp);
-    bool checkHelper(cOperand* targCompare);
 
-    int getOpComp(val_set_t val_set, size_t* component);
+    template <typename T>
+    static cOperand* createOp(uint8_t* curAddr)
+    {
+        T* cOptmp = new T;
+        cOptmp->initme(curAddr);
+        return cOptmp;
+    }
 
+    virtual int initme(uint8_t* initdata) = 0;
+
+    // routine for child to compare against a register
+    virtual bool checkHelper(cOperand* targCompare) = 0;
+    // accessor, for when getting variables need to operate on results
+    virtual int getOpComp(val_set_t val_set, size_t* component) = 0;
+
+    virtual size_t getinstsz() = 0;
     // case for adding a fixed size_t 
     // template <typename T>
     void fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index);

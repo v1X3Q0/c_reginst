@@ -5,14 +5,28 @@
 
 class cOperand_arm64 : public cOperand
 {
+protected:
+    
 public:
-    template <typename fv_rd, typename fv_rn, typename fv_imms, typename fv_immr, typename fv_immLarge>
-    static cOperand* insertToGlob(uint64_t opcode, fv_rd rd, fv_rn rn, fv_imms imms, fv_immr immr, fv_immLarge immLarge)
+    // constructor for a standard operator
+    // initiate it to an initialized fixed variable, that's it.
+    cOperand_arm64();
+
+    int initme(uint8_t* initdata);
+
+    size_t getinstsz() { return sizeof(uint32_t); };
+
+    bool checkHelper(cOperand* targCompare);
+    int getOpComp(val_set_t val_set, size_t* component);
+
+    template <typename fv_rd, typename fv_rn, typename fv_rm, typename fv_imms, typename fv_immr, typename fv_immLarge>
+    static cOperand* insertToGlob(uint64_t opcode, fv_rd rd, fv_rn rn, fv_rm rm, fv_imms imms, fv_immr immr, fv_immLarge immLarge)
     {
-        cOperand* outOp = new cOperand;
+        cOperand* outOp = new cOperand_arm64();
         outOp->parsedOpcode.opcode = opcode;
         FIXVAR_ADD(rd, outOp);
         FIXVAR_ADD(rn, outOp);
+        FIXVAR_ADD(rm, outOp);
         FIXVAR_ADD(imms, outOp);
         FIXVAR_ADD(immr, outOp);
         FIXVAR_ADD(immLarge, outOp);
@@ -25,8 +39,8 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP0_INST(lop, BR, B);
 
-        return insertToGlob<size_t, size_t, size_t, size_t, fv_immLarge>(
-            lop.opcode, 0, 0, 0, 0, immLarge);
+        return insertToGlob<size_t, size_t, size_t, size_t, size_t, fv_immLarge>(
+            lop.opcode, 0, 0, 0, 0, 0, immLarge);
     }
 
     template <typename fv_immLarge>
@@ -35,8 +49,8 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP0_INST(lop, BR, BL);
 
-        return insertToGlob<size_t, size_t, size_t, size_t, fv_immLarge>(
-            lop.opcode, 0, 0, 0, 0, immLarge);
+        return insertToGlob<size_t, size_t, size_t, size_t, size_t, fv_immLarge>(
+            lop.opcode, 0, 0, 0, 0, 0, immLarge);
     }
 
     // create load register literal
@@ -46,19 +60,19 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP2_INST(lop, LS, RL, NULL, IMM);
 
-        return insertToGlob<fv_rt, size_t, size_t, size_t, fv_imm19>(
-            lop.opcode, rt, 0, 0, 0, imm19);
+        return insertToGlob<fv_rt, size_t, size_t, size_t, size_t, fv_imm19>(
+            lop.opcode, rt, 0, 0, 0, 0, imm19);
     }
 
-    // create load register unsigned immediate
+    // create load/store register unsigned immediate
     template <typename fv_rt, typename fv_rn, typename fv_imm12>
     static cOperand* createLDRB(fv_rt rt, fv_rn rn, fv_imm12 imm12)
     {
         hdea64_opcode lop = {0};
         ENCODE_OP2_INST(lop, LS, RI, NULL, UIMM);
 
-        return insertToGlob<fv_rt, fv_rn, size_t, size_t, fv_imm12>(
-            lop.opcode, rt, rn, 0, 0, imm12);
+        return insertToGlob<fv_rt, fv_rn, size_t, size_t, size_t, fv_imm12>(
+            lop.opcode, rt, rn, 0, 0, 0, imm12);
     }
 
     // create add subtract immediate
@@ -68,8 +82,8 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP0_INST(lop, DPIMM, ASI);
 
-        return insertToGlob<fv_rd, fv_rn, size_t, size_t, fv_imm12>(
-            lop.opcode, rd, rn, 0, 0, imm12);
+        return insertToGlob<fv_rd, fv_rn, size_t, size_t, size_t, fv_imm12>(
+            lop.opcode, rd, rn, 0, 0, 0, imm12);
     }
 
     template <typename fv_rd, typename fv_immLarge>
@@ -78,8 +92,8 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP0_INST(lop, DPIMM, PC);
 
-        return insertToGlob<fv_rd, size_t, size_t, size_t, fv_immLarge>(
-            lop.opcode, rd, 0, 0, 0, immLarge);
+        return insertToGlob<fv_rd, size_t, size_t, size_t, size_t, fv_immLarge>(
+            lop.opcode, rd, 0, 0, 0, 0, immLarge);
     }
 
     // logical immediate, which in the end looks like a move
@@ -89,8 +103,8 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP0_INST(lop, DPIMM, LI);
 
-        return insertToGlob<fv_rd, fv_rn, fv_imms, fv_immr, size_t>(
-            lop.opcode, rd, rn, imms, immr, 0);
+        return insertToGlob<fv_rd, fv_rn, size_t, fv_imms, fv_immr, size_t>(
+            lop.opcode, rd, rn, 0, imms, immr, 0);
     }
 
     // mov with a wide immediate
@@ -100,8 +114,37 @@ public:
         hdea64_opcode lop = {0};
         ENCODE_OP0_INST(lop, DPIMM, MWI);
 
-        return insertToGlob<fv_rd, size_t, size_t, size_t, imm16>(
-            lop.opcode, rd, 0, 0, 0, imm16);
+        return insertToGlob<fv_rd, size_t, size_t, size_t, size_t, fv_imm16>(
+            lop.opcode, rd, 0, 0, 0, 0, imm16);
+    }
+
+    // or reg, reg
+    template <typename fv_rd, typename fv_rn, typename fv_imm6, typename fv_rm>
+    static cOperand* createORRR(fv_rd rd, fv_rn rn, fv_imm6 imm6, fv_rm rm)
+    {
+        hdea64_opcode lop = {0};
+        ENCODE_OP2_INST(lop, DPREG, 2SRC, SER, LSR);
+
+        return insertToGlob<fv_rd, fv_rn, fv_rm, size_t, size_t, fv_imm6>(
+            lop.opcode, rd, rn, rm, 0, 0, imm6);
+    }
+
+    // alias for ORR register, where it is mov reg, reg
+    template <typename fv_rd, typename fv_rm>
+    static cOperand* createMOV(fv_rd rd, fv_rm rm)
+    {
+        return createORRR<fv_rd, size_t, size_t, fv_rm>(rd, -1, 0, rm);
+    }
+
+    // add reg, reg, reg
+    template <typename fv_rd, typename fv_rn, typename fv_imm6, typename fv_rm>
+    static cOperand* createASSR(fv_rd rd, fv_rn rn, fv_imm6 imm6, fv_rm rm)
+    {
+        hdea64_opcode lop = {0};
+        ENCODE_OP2_INST(lop, DPREG, 2SRC, SER, ASS);
+
+        return insertToGlob<fv_rd, fv_rn, fv_rm, size_t, size_t, fv_imm6>(
+            lop.opcode, rd, rn, rm, 0, 0, imm6);
     }
 };
 
