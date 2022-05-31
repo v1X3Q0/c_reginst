@@ -1,6 +1,7 @@
 #include <string.h>
-#include <hdeA64.h>
+
 #include <localUtil.h>
+#include <hdeA64.h>
 
 #include "opcOp_arch.h"
 
