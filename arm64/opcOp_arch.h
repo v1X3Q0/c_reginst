@@ -1,11 +1,13 @@
 #ifndef OPCOP_AARCH64_H
 #define OPCOP_AARCH64_H
 
+#include <hdeA64.h>
 #include "../opcOperand.h"
 
 class cOperand_arm64 : public cOperand
 {
 protected:
+    hdeA64_t parsedOpcode;
     
 public:
     // constructor for a standard operator

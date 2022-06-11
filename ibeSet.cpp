@@ -4,7 +4,11 @@
 #include <localUtil.h>
 #include "ibeSet.h"
 #include "opcOperand.h"
+#if defined(SUPPORT_X86_64)
+#include "amd64/opcOp_arch.h"
+#elif defined(SUPPORT_AARCH64)
 #include "arm64/opcOp_arch.h"
+#endif
 
 void instSet::addNewInst(cOperand* newInstruction)
 {
@@ -131,9 +135,20 @@ int instSet::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void*
     
     for (int i = 0; i < instPatternList.size(); i++)
     {
-        if (ibe_arch == AARCH64_IBE)
+        switch (ibe_arch)
         {
+#ifdef SUPPORT_AARCH64
+        case AARCH64_IBE:
             tmpInst = cOperand::createOp<cOperand_arm64>(curAddr);
+            break;
+#endif
+#ifdef SUPPORT_X86_64
+        case X86_64_IBE:
+            tmpInst = cOperand::createOp<cOperand_amd64>(curAddr);
+            break;
+#endif
+        default:
+            goto fail;
         }
         if (step > 0)
         {

@@ -40,7 +40,7 @@ protected:
     uint32_t fixvar_unmod;
     uint32_t fixvar_set;
 public:
-    hde_t parsedOpcode;
+    // hde_t parsedOpcode;
 
     template <typename T>
     static cOperand* createOp(uint8_t* curAddr)

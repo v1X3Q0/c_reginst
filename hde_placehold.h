@@ -13,9 +13,9 @@ typedef enum
 
 #define VAL_SET_REGMASK (e_rd | e_rn | e_rm)
 
-typedef struct
-{
+// typedef struct
+// {
     
-} hde_t;
+// } hde_t;
 
 #endif
