@@ -3,11 +3,12 @@
 #include <localUtil.h>
 #include <hde.h>
 
+#include "../opcOperand.h"
 #include "opcOp_arch.h"
 
 cOperand_amd64::cOperand_amd64()
 {
-    fixvar_set = (e_rd | e_rn | e_rm | e_imms | e_immr | e_immLarge);
+    fixvar_set = (e_imm | e_disp);
     memset(&parsedOpcode, 0, sizeof(hde64s));
 }
 
@@ -19,14 +20,12 @@ int cOperand_amd64::initme(uint8_t* initdata)
 bool cOperand_amd64::checkHelper(cOperand* targCompare)
 {
     bool result = false;
+    cOperand_amd64* targCompare_l = (cOperand_amd64*)targCompare;
 
-    SAFE_BAIL(parsedOpcode.opcode != targCompare->parsedOpcode.opcode);
-    CMPASSIGN_REG(parsedOpcode, targCompare, rd);
-    CMPASSIGN_REG(parsedOpcode, targCompare, rn);
-    CMPASSIGN_REG(parsedOpcode, targCompare, rm);
-    CMPASSIGN_REG(parsedOpcode, targCompare, imms);
-    CMPASSIGN_REG(parsedOpcode, targCompare, immr);
-    CMPASSIGN_REG(parsedOpcode, targCompare, immLarge);
+    SAFE_BAIL(parsedOpcode.opcode != targCompare_l->parsedOpcode.opcode);
+    SAFE_BAIL(parsedOpcode.len != targCompare_l->parsedOpcode.len);
+    CMPASSIGN_REG_IND(parsedOpcode, targCompare_l, imm, imm.imm64);
+    CMPASSIGN_REG_IND(parsedOpcode, targCompare_l, disp, disp.disp32);
 
     result = true;
 fail:
@@ -35,21 +34,20 @@ fail:
 
 int cOperand_amd64::getOpComp(val_set_t val_set, size_t* component)
 {
-#define EACH_CASE(INDEX) \
+#define EACH_CASE_IND(INDEX, STRUCT_INDEX) \
     case e_ ## INDEX: \
-        *component = parsedOpcode.INDEX; \
+        *component = parsedOpcode.STRUCT_INDEX; \
         break;
+
+#define EACH_CASE(INDEX) \
+    EACH_CASE_IND(INDEX, INDEX)
 
     int result = -1;
 
     switch (val_set)
     {
-    EACH_CASE(rd);
-    EACH_CASE(rn);
-    EACH_CASE(rm);
-    EACH_CASE(imms);
-    EACH_CASE(immr);
-    EACH_CASE(immLarge);
+    EACH_CASE_IND(imm, imm.imm64);
+    EACH_CASE_IND(disp, disp.disp32);
     default:
         goto fail;
     }

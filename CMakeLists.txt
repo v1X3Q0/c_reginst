@@ -23,6 +23,4 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_LIST})
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     find_package(capstone)
     target_include_directories(${PROJECT_NAME} PRIVATE ${capstone_INCLUDE_DIRS})
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-        -DSUPPORT_X86_64=1)
 endif()

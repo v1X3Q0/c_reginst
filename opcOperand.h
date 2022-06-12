@@ -3,23 +3,26 @@
 
 #include <stdint.h>
 
-#ifdef __arm64__
+#if defined(SUPPORT_X86_64)
+#include <hde.h>
+#elif defined(SUPPORT_AARCH64)
 #include <hdeA64.h>
-#else
-#include "hde_placehold.h"
 #endif
 // #include <ibeSet.h>
 
-#define CMPASSIGN_REG(LOCAL, TARGET, INDEX) \
+#define CMPASSIGN_REG_IND(LOCAL, TARGET, INDEX, STRUCT_INDEX) \
     if (fixvar_set & e_ ## INDEX) \
     { \
-        SAFE_BAIL(LOCAL.INDEX != TARGET->LOCAL.INDEX); \
+        SAFE_BAIL(LOCAL.STRUCT_INDEX != TARGET->LOCAL.STRUCT_INDEX); \
     } \
     else \
     { \
-        LOCAL.INDEX = TARGET->LOCAL.INDEX; \
+        LOCAL.STRUCT_INDEX = TARGET->LOCAL.STRUCT_INDEX; \
         fixvar_set ^= e_  ## INDEX; \
     }
+
+#define CMPASSIGN_REG(LOCAL, TARGET, INDEX) \
+    CMPASSIGN_REG_IND(LOCAL, TARGET, INDEX, INDEX)
 
 #define FIXVAR_ADD(INDEX, OPERAND) \
     OPERAND->fixvar_add(&OPERAND->parsedOpcode.INDEX, INDEX, e_ ## INDEX);
