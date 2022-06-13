@@ -24,9 +24,15 @@
 #define CMPASSIGN_REG(LOCAL, TARGET, INDEX) \
     CMPASSIGN_REG_IND(LOCAL, TARGET, INDEX, INDEX)
 
-#define FIXVAR_ADD(INDEX, OPERAND) \
-    OPERAND->fixvar_add(&OPERAND->parsedOpcode.INDEX, INDEX, e_ ## INDEX);
+// #define FIXVAR_ADD(INDEX, OPERAND) \
+//     OPERAND->fixvar_add(&OPERAND->parsedOpcode.INDEX, INDEX, e_ ## INDEX);
     // fixvar_add<typeof(hde_t::INDEX)>(&OPERAND->parsedOpcode.INDEX, INDEX, e_ ## INDEX);
+
+#define FIXVAR_ADD_IND(INDEX, STRUCT_INDEX, OPERAND) \
+    OPERAND->fixvar_add(&OPERAND->parsedOpcode.STRUCT_INDEX, INDEX, e_ ## INDEX);
+
+#define FIXVAR_ADD(INDEX, OPERAND) \
+    FIXVAR_ADD_IND(INDEX, INDEX, OPERAND)
 
 class cOperand;
 
@@ -64,6 +70,9 @@ public:
     // case for adding a fixed size_t 
     // template <typename T>
     void fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index);
+    void fixvar_add(uint8_t* targetVar, size_t hde_member, val_set_t e_index);
+    void fixvar_add(uint16_t* targetVar, size_t hde_member, val_set_t e_index);
+    void fixvar_add(uint32_t* targetVar, size_t hde_member, val_set_t e_index);
 
     // case for adding a variable size_t, inwhich we just are adding a * to a **
     // template<typename T>

@@ -24,6 +24,10 @@ bool cOperand_amd64::checkHelper(cOperand* targCompare)
 
     SAFE_BAIL(parsedOpcode.opcode != targCompare_l->parsedOpcode.opcode);
     SAFE_BAIL(parsedOpcode.len != targCompare_l->parsedOpcode.len);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_w);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_r);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_x);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_b);
     CMPASSIGN_REG_IND(parsedOpcode, targCompare_l, imm, imm.imm64);
     CMPASSIGN_REG_IND(parsedOpcode, targCompare_l, disp, disp.disp32);
 

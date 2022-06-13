@@ -32,6 +32,21 @@ void cOperand::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_inde
     fixvar_unmod = fixvar_set;
 }
 
+#define FIXVAR_UINTX(uintx_t) \
+    void cOperand::fixvar_add(uintx_t* targetVar, size_t hde_member, val_set_t e_index) \
+    { \
+        if (e_index & VAL_SET_REGMASK) \
+        { \
+            hde_member &= 0x1f; \
+        } \
+        *targetVar = (uintx_t)hde_member; \
+        fixvar_set |= e_index; \
+        fixvar_unmod = fixvar_set; \
+    }
+
+FIXVAR_UINTX(uint32_t)
+FIXVAR_UINTX(uint8_t)
+
 // case for adding a variable size_t, inwhich we just are adding a * to a **
 // template<typename T>
 void cOperand::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index)
