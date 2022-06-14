@@ -8,17 +8,18 @@
 cOperand_arm64::cOperand_arm64()
 {
     fixvar_set = (e_rd | e_rn | e_rm | e_imms | e_immr | e_immLarge);
-    memset(&parsedOpcode, 0, sizeof(hde_t));
+    memset(&parsedOpcode, 0, sizeof(hdeA64_t));
 }
 
 int cOperand_arm64::initme(uint8_t* initdata)
 {
-    return parseInst(*(uint32_t*)initdata, &parsedOpcode);
+    return parseByEnc(*(uint32_t*)initdata, &parsedOpcode);
 }
 
-bool cOperand_arm64::checkHelper(cOperand* targCompare)
+bool cOperand_arm64::checkHelper(cOperand* targCompare_a)
 {
     bool result = false;
+    cOperand_arm64* targCompare = (cOperand_arm64*)targCompare_a;
 
     SAFE_BAIL(parsedOpcode.opcode != targCompare->parsedOpcode.opcode);
     CMPASSIGN_REG(parsedOpcode, targCompare, rd);

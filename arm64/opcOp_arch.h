@@ -7,9 +7,9 @@
 class cOperand_arm64 : public cOperand
 {
 protected:
-    hdeA64_t parsedOpcode;
     
 public:
+    hdeA64_t parsedOpcode;
     // constructor for a standard operator
     // initiate it to an initialized fixed variable, that's it.
     cOperand_arm64();
@@ -24,7 +24,7 @@ public:
     template <typename fv_rd, typename fv_rn, typename fv_rm, typename fv_imms, typename fv_immr, typename fv_immLarge>
     static cOperand* insertToGlob(uint64_t opcode, fv_rd rd, fv_rn rn, fv_rm rm, fv_imms imms, fv_immr immr, fv_immLarge immLarge)
     {
-        cOperand* outOp = new cOperand_arm64();
+        cOperand_arm64* outOp = new cOperand_arm64();
         outOp->parsedOpcode.opcode = opcode;
         FIXVAR_ADD(rd, outOp);
         FIXVAR_ADD(rn, outOp);
