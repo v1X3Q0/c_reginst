@@ -8,13 +8,15 @@
 
 cOperand_amd64::cOperand_amd64()
 {
-    fixvar_set = (e_imm | e_disp);
-    memset(&parsedOpcode, 0, sizeof(hde64s));
+    fixvar_set = (
+        e_reg_src1 | e_reg_src2 | e_reg_dst1 | e_reg_dst2 | 
+        e_imm | e_disp);
+    memset(&parsedOpcode, 0, sizeof(hde64s_t));
 }
 
 int cOperand_amd64::initme(uint8_t* initdata)
 {
-    return hde64_disasm(initdata, &parsedOpcode);
+    return parseInst(initdata, &parsedOpcode);
 }
 
 bool cOperand_amd64::checkHelper(cOperand* targCompare)
@@ -22,14 +24,14 @@ bool cOperand_amd64::checkHelper(cOperand* targCompare)
     bool result = false;
     cOperand_amd64* targCompare_l = (cOperand_amd64*)targCompare;
 
-    SAFE_BAIL(parsedOpcode.opcode != targCompare_l->parsedOpcode.opcode);
+    SAFE_BAIL(parsedOpcode.opcode1 != targCompare_l->parsedOpcode.opcode1);
     SAFE_BAIL(parsedOpcode.len != targCompare_l->parsedOpcode.len);
-    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_w);
-    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_r);
-    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_x);
-    CMPASSIGN_REG(parsedOpcode, targCompare_l, rex_b);
-    CMPASSIGN_REG_IND(parsedOpcode, targCompare_l, imm, imm.imm64);
-    CMPASSIGN_REG_IND(parsedOpcode, targCompare_l, disp, disp.disp32);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_src1);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_src2);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_dst1);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_dst2);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, imm);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, disp);
 
     result = true;
 fail:
@@ -50,8 +52,12 @@ int cOperand_amd64::getOpComp(val_set_t val_set, size_t* component)
 
     switch (val_set)
     {
-    EACH_CASE_IND(imm, imm.imm64);
-    EACH_CASE_IND(disp, disp.disp32);
+    EACH_CASE(reg_src1);
+    EACH_CASE(reg_src2);
+    EACH_CASE(reg_dst1);
+    EACH_CASE(reg_dst2);
+    EACH_CASE(imm, imm);
+    EACH_CASE(disp, disp);
     default:
         goto fail;
     }

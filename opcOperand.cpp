@@ -57,3 +57,15 @@ void cOperand::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_i
     fixvar_unmod = fixvar_set;
 }
 
+#define FIXVAR_SAVEVAR_UINTX(uintx) \
+void cOperand::fixvar_add(uintx* targetVar, saveVar_t var_member, val_set_t e_index) \
+{ \
+    var_member->regRand = this; \
+    var_member->val_set = e_index; \
+    fixvar_set &= ~e_index; \
+    fixvar_unmod = fixvar_set; \
+}
+
+FIXVAR_SAVEVAR_UINTX(uint8_t);
+FIXVAR_SAVEVAR_UINTX(uint16_t);
+FIXVAR_SAVEVAR_UINTX(uint32_t);
