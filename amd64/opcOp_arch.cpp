@@ -19,6 +19,11 @@ int cOperand_amd64::initme(uint8_t* initdata)
     return parseInst(initdata, &parsedOpcode);
 }
 
+size_t cOperand_amd64::getinstsz()
+{
+    return parsedOpcode.len;
+}
+
 bool cOperand_amd64::checkHelper(cOperand* targCompare)
 {
     bool result = false;
@@ -30,6 +35,7 @@ bool cOperand_amd64::checkHelper(cOperand* targCompare)
     CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_src2);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_dst1);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_dst2);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, addrmode);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, imm);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, disp);
 

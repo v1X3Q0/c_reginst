@@ -44,8 +44,10 @@ void cOperand::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_inde
         fixvar_unmod = fixvar_set; \
     }
 
-FIXVAR_UINTX(uint32_t)
-FIXVAR_UINTX(uint8_t)
+FIXVAR_UINTX(uint8_t);
+FIXVAR_UINTX(uint32_t);
+FIXVAR_UINTX(int32_t);
+FIXVAR_UINTX(int64_t);
 
 // case for adding a variable size_t, inwhich we just are adding a * to a **
 // template<typename T>
@@ -69,3 +71,5 @@ void cOperand::fixvar_add(uintx* targetVar, saveVar_t var_member, val_set_t e_in
 FIXVAR_SAVEVAR_UINTX(uint8_t);
 FIXVAR_SAVEVAR_UINTX(uint16_t);
 FIXVAR_SAVEVAR_UINTX(uint32_t);
+FIXVAR_SAVEVAR_UINTX(int32_t);
+FIXVAR_SAVEVAR_UINTX(int64_t);

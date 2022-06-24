@@ -36,6 +36,7 @@ public:
     void addNewInst(cOperand* newInstruction);
     int getVar(uint32_t key, size_t* value);
     void clearVars();
+    int getinstoff(uint32_t index, size_t* instOff);
 
     // base class requirement
     int findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a);

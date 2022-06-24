@@ -121,6 +121,33 @@ int instSet::incrementInst(uint8_t* curAddr, cOperand* curInst, uint8_t** result
     return result;
 }
 
+int instSet::getinstoff(uint32_t index, size_t* instOff)
+{
+    int result = -1;
+    int i = 0;
+    size_t curOffset = 0;
+    auto opc_index = instPatternList.begin();
+
+    SAFE_BAIL(index > instPatternList.size() + 1);
+
+    while (true)
+    {
+        FINISH_IF(i == index);
+        curOffset += (*opc_index)->getinstsz();
+        opc_index++;
+        i++;
+    }
+
+finish:
+    result = 0;
+    if (instOff != 0)
+    {
+        *instOff = curOffset;
+    }
+fail:
+    return result;
+}
+
 int instSet::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a)
 {
     int result = -1;
@@ -183,7 +210,7 @@ int instSet::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void*
         }
 
         // increments
-        incrementInst(curAddr, instSlide.front(), &curAddr);
+        incrementInst(curAddr, tmpInst, &curAddr);
         tmpInst->initme(slideEnd);
         incrementInst(slideEnd, tmpInst, &slideEnd);
     }
