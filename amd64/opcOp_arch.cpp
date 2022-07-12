@@ -62,8 +62,9 @@ int cOperand_amd64::getOpComp(val_set_t val_set, size_t* component)
     EACH_CASE(reg_src2);
     EACH_CASE(reg_dst1);
     EACH_CASE(reg_dst2);
-    EACH_CASE(imm, imm);
-    EACH_CASE(disp, disp);
+    // these definitions consistent with our custom struct
+    EACH_CASE(imm);
+    EACH_CASE(disp);
     default:
         goto fail;
     }

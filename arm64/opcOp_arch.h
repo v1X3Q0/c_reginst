@@ -26,7 +26,9 @@ public:
     {
         cOperand_arm64* outOp = new cOperand_arm64();
         outOp->parsedOpcode.opcode = opcode;
-        FIXVAR_ADD(rd, outOp);
+        // FIXVAR_ADD(rd, outOp);
+        // FIXVAR_ADD_IND(rd, rd, outOp)
+        outOp->fixvar_add(&outOp->parsedOpcode.rd, rd, e_rd);
         FIXVAR_ADD(rn, outOp);
         FIXVAR_ADD(rm, outOp);
         FIXVAR_ADD(imms, outOp);
