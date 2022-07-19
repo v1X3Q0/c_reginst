@@ -48,7 +48,9 @@ FIXVAR_UINTX(uint8_t);
 FIXVAR_UINTX(uint32_t);
 FIXVAR_UINTX(int32_t);
 FIXVAR_UINTX(int64_t);
+#ifdef __APPLE__
 FIXVAR_UINTX(long);
+#endif
 
 // case for adding a variable size_t, inwhich we just are adding a * to a **
 // template<typename T>
@@ -74,4 +76,6 @@ FIXVAR_SAVEVAR_UINTX(uint16_t);
 FIXVAR_SAVEVAR_UINTX(uint32_t);
 FIXVAR_SAVEVAR_UINTX(int32_t);
 FIXVAR_SAVEVAR_UINTX(int64_t);
+#ifdef __APPLE__
 FIXVAR_SAVEVAR_UINTX(long);
+#endif
