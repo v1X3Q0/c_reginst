@@ -1,5 +1,6 @@
 #include <vector>
 #include <list>
+#include <stdlib.h>
 
 #include <localUtil.h>
 #include "ibeSet.h"
