@@ -30,7 +30,9 @@ bool cOperand_amd64::checkHelper(cOperand* targCompare)
     cOperand_amd64* targCompare_l = (cOperand_amd64*)targCompare;
 
     SAFE_BAIL(parsedOpcode.opcode1 != targCompare_l->parsedOpcode.opcode1);
-    SAFE_BAIL(parsedOpcode.len != targCompare_l->parsedOpcode.len);
+    // like i mentioned before, cause of the potential var len for instructions
+    // SAFE_BAIL(parsedOpcode.len != targCompare_l->parsedOpcode.len);
+    CMPASSIGN_REG(parsedOpcode, targCompare_l, len);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_src1);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_src2);
     CMPASSIGN_REG(parsedOpcode, targCompare_l, reg_dst1);
@@ -58,6 +60,8 @@ int cOperand_amd64::getOpComp(val_set_t val_set, size_t* component)
 
     switch (val_set)
     {
+        // lastly, need this for var len
+    EACH_CASE(len);
     EACH_CASE(reg_src1);
     EACH_CASE(reg_src2);
     EACH_CASE(reg_dst1);
