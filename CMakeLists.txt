@@ -9,7 +9,7 @@ set(SOURCES_LIST opcOperand.cpp ibeSet.cpp)
 set(INCLUDE_LIST
     ${ANDROID_TOOL_BASE}/common/local_util
     ${ANDROID_TOOL_BASE}/common/bgrep_c)
-if(ARCH STREQUAL "arm64" OR ARCH STREQUAL "arm64e")
+if(ARCH MATCHES "arm64" OR ARCH MATCHES "arm64e" OR ARCH MATCHES "aarch64")
     list(APPEND SOURCES_LIST arm64/opcOp_arch.cpp)
     list(APPEND INCLUDE_LIST ${ANDROID_TOOL_BASE}/common/hde_armv8)
 elseif(ARCH MATCHES "AMD64" OR ARCH MATCHES "i386" OR ARCH MATCHES "x86_64")
