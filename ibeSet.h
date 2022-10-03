@@ -38,6 +38,7 @@ public:
     void clearVars();
     int getinstoff(uint32_t index, size_t* instOff);
 
+protected:
     // base class requirement
     int findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a);
     // opcOperandVar* useKey(uint32_t key);
