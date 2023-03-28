@@ -7,16 +7,19 @@
 #include "opcOperand.h"
 #if defined(SUPPORT_X86_64)
 #include "amd64/opcOp_arch.h"
-#elif defined(SUPPORT_AARCH64)
+#endif
+#if defined(SUPPORT_AARCH64)
 #include "arm64/opcOp_arch.h"
 #endif
 
-void instSet::addNewInst(cOperand* newInstruction)
+template<typename cOperand_t, typename val_set_t>
+void instSet<cOperand_t, val_set_t>::addNewInst(cOperand<val_set_t>* newInstruction)
 {
     instPatternList.push_back(newInstruction);   
 }
 
-void instSet::clearInternals()
+template<typename cOperand_t, typename val_set_t>
+void instSet<cOperand_t, val_set_t>::clearInternals()
 {
     auto it = varTable.begin();
 
@@ -34,37 +37,40 @@ void instSet::clearInternals()
     }
 }
 
-saveVar_t instSet::checkOperand(uint32_t newOperand)
+template<typename cOperand_t, typename val_set_t>
+saveVar<val_set_t>* instSet<cOperand_t, val_set_t>::checkOperand(uint32_t newOperand)
 {
     saveVar_t result = 0;
     auto it = varTable.begin();
     it = varTable.find(newOperand);
     if (it == varTable.end())
     {
-        result = (saveVar_t)calloc(1, sizeof(saveVar));
+        result = new saveVar<val_set_t>;
         varTable[newOperand] = result;
     }
     result = varTable[newOperand];
     return result;
 }
 
-saveVar_t instSet::addOperand(uint32_t newOperand, val_set_t val_set, cOperand* regRand)
-{
-    saveVar_t result = 0;
-    auto it = varTable.begin();
-    it = varTable.find(newOperand);
-    if (it == varTable.end())
-    {
-        result = (saveVar_t)calloc(1, sizeof(saveVar));
-        result->val_set = val_set;
-        result->regRand = regRand;
-        varTable[newOperand] = result;
-    }
-    result = varTable[newOperand];
-    return result;
-}
+// deprecated
+// saveVar_t instSet::addOperand(uint32_t newOperand, val_set_t val_set, cOperand* regRand)
+// {
+//     saveVar_t result = 0;
+//     auto it = varTable.begin();
+//     it = varTable.find(newOperand);
+//     if (it == varTable.end())
+//     {
+//         result = (saveVar_t)calloc(1, sizeof(saveVar));
+//         result->val_set = val_set;
+//         result->regRand = regRand;
+//         varTable[newOperand] = result;
+//     }
+//     result = varTable[newOperand];
+//     return result;
+// }
 
-int instSet::getVar(uint32_t key, size_t* value)
+template<typename cOperand_t, typename val_set_t>
+int instSet<cOperand_t, val_set_t>::getVar(uint32_t key, size_t* value)
 {
     int result = -1;
     auto i = varTable.begin();
@@ -80,7 +86,8 @@ fail:
     return result;
 }
 
-bool equalInstSet(std::list<cOperand*>* list1, std::list<cOperand*>* list2)
+template <typename val_set_t>
+bool equalInstSet(std::list<cOperand<val_set_t>*>* list1, std::list<cOperand<val_set_t>*>* list2)
 {
     auto it1 = list1->begin();
     auto it2 = list2->begin();
@@ -95,7 +102,8 @@ bool equalInstSet(std::list<cOperand*>* list1, std::list<cOperand*>* list2)
     return true;
 }
 
-void instSet::clearVars()
+template<typename cOperand_t, typename val_set_t>
+void instSet<cOperand_t, val_set_t>::clearVars()
 {
     for (auto i = varTable.begin(); i != varTable.end(); i++)
     {
@@ -103,7 +111,8 @@ void instSet::clearVars()
     }
 }
 
-int instSet::incrementInst(uint8_t* curAddr, cOperand* curInst, uint8_t** resultAddr)
+template<typename cOperand_t, typename val_set_t>
+int instSet<cOperand_t, val_set_t>::incrementInst(uint8_t* curAddr, cOperand<val_set_t>* curInst, uint8_t** resultAddr)
 {
     int result = -1;
     // variable length inst sets can't really do much for step, could work
@@ -122,7 +131,8 @@ int instSet::incrementInst(uint8_t* curAddr, cOperand* curInst, uint8_t** result
     return result;
 }
 
-int instSet::getinstoff(uint32_t index, size_t* instOff)
+template<typename cOperand_t, typename val_set_t>
+int instSet<cOperand_t, val_set_t>::getinstoff(uint32_t index, size_t* instOff)
 {
     int result = -1;
     int i = 0;
@@ -149,7 +159,8 @@ fail:
     return result;
 }
 
-int instSet::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a)
+template<typename cOperand_t, typename val_set_t>
+int instSet<cOperand_t, val_set_t>::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a)
 {
     int result = -1;
     uint8_t* startAddress = startAddress_a;
@@ -157,8 +168,8 @@ int instSet::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void*
     uint8_t* endAddress = startAddress + sizeSearch;
     uint8_t* curAddr = startAddress;
     uint8_t* slideEnd = 0;
-    std::list<cOperand*> instSlide;
-    cOperand* tmpInst = 0;
+    std::list<cOperand<val_set_t>*> instSlide;
+    cOperand<val_set_t>* tmpInst = 0;
     int dbgCounter = 0;
     
     for (int i = 0; i < instPatternList.size(); i++)
@@ -167,12 +178,12 @@ int instSet::findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void*
         {
 #ifdef SUPPORT_AARCH64
         case AARCH64_IBE:
-            tmpInst = cOperand::createOp<cOperand_arm64>(curAddr);
+            tmpInst = cOperand_arm64::createOp<cOperand_arm64>(curAddr);
             break;
 #endif
 #ifdef SUPPORT_X86_64
         case X86_64_IBE:
-            tmpInst = cOperand::createOp<cOperand_amd64>(curAddr);
+            tmpInst = cOperand_amd64::createOp<cOperand_amd64>(curAddr);
             break;
 #endif
         default:

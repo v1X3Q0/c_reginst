@@ -4,11 +4,14 @@
 #include <hdeA64.h>
 #include "../opcOperand.h"
 
-class cOperand_arm64 : public cOperand
+class cOperand_arm64 : public cOperand<val_set_A64_t>
 {
 protected:
     
 public:
+
+    typedef saveVar<val_set_A64_t> *ssaveVar_t;
+
     hdeA64_t parsedOpcode;
     // constructor for a standard operator
     // initiate it to an initialized fixed variable, that's it.
@@ -19,7 +22,7 @@ public:
     size_t getinstsz() { return sizeof(uint32_t); };
 
     bool checkHelper(cOperand* targCompare);
-    int getOpComp(val_set_t val_set, size_t* component);
+    int getOpComp(val_set_A64_t val_set, size_t* component);
 
     template <typename fv_rd, typename fv_rn, typename fv_rm, typename fv_imms, typename fv_immr, typename fv_immLarge>
     static cOperand* insertToGlob(uint64_t opcode, fv_rd rd, fv_rn rn, fv_rm rm, fv_imms imms, fv_immr immr, fv_immLarge immLarge)

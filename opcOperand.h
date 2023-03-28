@@ -34,27 +34,40 @@
 #define FIXVAR_ADD(INDEX, OPERAND) \
     FIXVAR_ADD_IND(INDEX, INDEX, OPERAND)
 
+template <typename val_set_t>
 class cOperand;
 
-typedef struct
+// typedef struct
+// {
+//     val_set_t val_set;
+//     cOperand* regRand;
+// } saveVar, *saveVar_t;
+
+template <typename val_set_t>
+class saveVar
 {
     val_set_t val_set;
-    cOperand* regRand;
-} saveVar, *saveVar_t;
+    cOperand<val_set_t>* regRand;
+};
 
+// typedef saveVar *saveVar_t;
+
+template<typename val_set_t>
 class cOperand
 {
 protected:
+
+    typedef saveVar<val_set_t> saveVar_t;
 // if the variable has been fixed
     uint32_t fixvar_unmod;
     uint32_t fixvar_set;
 public:
     // hde_t parsedOpcode;
 
-    template <typename T>
+    template <typename opType_t>
     static cOperand* createOp(uint8_t* curAddr)
     {
-        T* cOptmp = new T;
+        opType_t* cOptmp = new opType_t;
         cOptmp->initme(curAddr);
         return cOptmp;
     }
@@ -90,7 +103,10 @@ public:
     void fixvar_add(long* targetVar, saveVar_t var_member, val_set_t e_index);
 #endif
 
-    void clearVars();
+    void clearVars()
+    {
+        fixvar_set = fixvar_unmod;
+    }
 };
 
 #endif

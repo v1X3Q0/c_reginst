@@ -46,7 +46,7 @@ fail:
     return result;
 }
 
-int cOperand_amd64::getOpComp(val_set_t val_set, size_t* component)
+int cOperand_amd64::getOpComp(val_set_X86_t val_set, size_t* component)
 {
 #define EACH_CASE_IND(INDEX, STRUCT_INDEX) \
     case e_ ## INDEX: \

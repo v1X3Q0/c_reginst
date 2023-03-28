@@ -6,14 +6,10 @@
 
 #include "opcOperand.h"
 
-void cOperand::clearVars()
-{
-    fixvar_set = fixvar_unmod;
-}
-
 // case for adding a fixed size_t 
 // template <typename T>
-void cOperand::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index)
+template<typename val_set_t>
+void cOperand<val_set_t>::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index)
 {
     // register technically can't be higher than 0x1f, so do this to FE
     // mask -1 to be 0x1f
@@ -27,16 +23,17 @@ void cOperand::fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_inde
 }
 
 #define FIXVAR_UINTX(uintx_t) \
-    void cOperand::fixvar_add(uintx_t* targetVar, size_t hde_member, val_set_t e_index) \
+template <typename val_set_t> \
+void cOperand<val_set_t>::fixvar_add(uintx_t* targetVar, size_t hde_member, val_set_t e_index) \
+{ \
+    if (e_index & VAL_SET_REGMASK) \
     { \
-        if (e_index & VAL_SET_REGMASK) \
-        { \
-            hde_member &= 0x1f; \
-        } \
-        *targetVar = (uintx_t)hde_member; \
-        fixvar_set |= e_index; \
-        fixvar_unmod = fixvar_set; \
-    }
+        hde_member &= 0x1f; \
+    } \
+    *targetVar = (uintx_t)hde_member; \
+    fixvar_set |= e_index; \
+    fixvar_unmod = fixvar_set; \
+}
 
 FIXVAR_UINTX(uint8_t);
 FIXVAR_UINTX(uint32_t);
@@ -47,8 +44,8 @@ FIXVAR_UINTX(long);
 #endif
 
 // case for adding a variable size_t, inwhich we just are adding a * to a **
-// template<typename T>
-void cOperand::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index)
+template<typename val_set_t>
+void cOperand<val_set_t>::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index)
 {
     var_member->regRand = this;
     var_member->val_set = e_index;
@@ -57,7 +54,8 @@ void cOperand::fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_i
 }
 
 #define FIXVAR_SAVEVAR_UINTX(uintx) \
-void cOperand::fixvar_add(uintx* targetVar, saveVar_t var_member, val_set_t e_index) \
+template <typename val_set_t> \
+void cOperand<val_set_t>::fixvar_add(uintx* targetVar, saveVar_t var_member, val_set_t e_index) \
 { \
     var_member->regRand = this; \
     var_member->val_set = e_index; \

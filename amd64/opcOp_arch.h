@@ -1,15 +1,18 @@
-#ifndef OPCOP_AARCH64_H
-#define OPCOP_AARCH64_H
+#ifndef OPCOP_AMD64_H
+#define OPCOP_AMD64_H
 
 #include <hde.h>
 #include "../opcOperand.h"
 
 
-class cOperand_amd64 : public cOperand
+class cOperand_amd64 : public cOperand<val_set_X86_t>
 {
 protected:
 
 public:
+
+    typedef saveVar<val_set_X86_t> *ssaveVar_t;
+
     hde64s_t parsedOpcode;
     // constructor for a standard operator
     // initiate it to an initialized fixed variable, that's it.
@@ -19,7 +22,7 @@ public:
 
     size_t getinstsz();
     bool checkHelper(cOperand* targCompare);
-    int getOpComp(val_set_t val_set, size_t* component);
+    int getOpComp(val_set_X86_t val_set, size_t* component);
 
     template <
         typename fv_len,

@@ -34,7 +34,7 @@ fail:
     return result;
 }
 
-int cOperand_arm64::getOpComp(val_set_t val_set, size_t* component)
+int cOperand_arm64::getOpComp(val_set_A64_t val_set, size_t* component)
 {
 #define EACH_CASE(INDEX) \
     case e_ ## INDEX: \
