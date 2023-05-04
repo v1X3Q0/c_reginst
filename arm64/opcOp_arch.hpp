@@ -22,7 +22,19 @@ bool cOperand_arm64::checkHelper(cOperand* targCompare_a)
     cOperand_arm64* targCompare = (cOperand_arm64*)targCompare_a;
 
     SAFE_BAIL(parsedOpcode.opcode != targCompare->parsedOpcode.opcode);
-    CMPASSIGN_REG(parsedOpcode, targCompare, rd);
+    // CMPASSIGN_REG(parsedOpcode, targCompare, rd);
+    if (fixvar_set & e_rd)
+    {
+        if (parsedOpcode.rd != targCompare->parsedOpcode.rd)
+        {
+            goto fail;
+        };
+    }
+    else
+    {
+        parsedOpcode.rd = targCompare->parsedOpcode.rd;
+        fixvar_set ^= e_rd;
+    }
     CMPASSIGN_REG(parsedOpcode, targCompare, rn);
     CMPASSIGN_REG(parsedOpcode, targCompare, rm);
     CMPASSIGN_REG(parsedOpcode, targCompare, imms);
@@ -45,7 +57,10 @@ int cOperand_arm64::getOpComp(val_set_A64_t val_set, size_t* component)
 
     switch (val_set)
     {
-    EACH_CASE(rd);
+    // EACH_CASE(rd);
+    case e_rd:
+        *component = parsedOpcode.rd;
+        break;
     EACH_CASE(rn);
     EACH_CASE(rm);
     EACH_CASE(imms);

@@ -10,7 +10,7 @@ protected:
     
 public:
 
-    typedef saveVar<val_set_A64_t> *ssaveVar_t;
+    typedef saveVar<val_set_A64_t> *saveVar_t;
 
     hdeA64_t parsedOpcode;
     // constructor for a standard operator
@@ -24,13 +24,15 @@ public:
     bool checkHelper(cOperand* targCompare);
     int getOpComp(val_set_A64_t val_set, size_t* component);
 
+    // this function will set the variable and non variable args. passed into it is an array of
+    // fixed and variable args, so they get set in the internal. fixvar_set is the internal
+    // tracker for if something is a fixed
     template <typename fv_rd, typename fv_rn, typename fv_rm, typename fv_imms, typename fv_immr, typename fv_immLarge>
     static cOperand* insertToGlob(uint64_t opcode, fv_rd rd, fv_rn rn, fv_rm rm, fv_imms imms, fv_immr immr, fv_immLarge immLarge)
     {
         cOperand_arm64* outOp = new cOperand_arm64();
         outOp->parsedOpcode.opcode = opcode;
         // FIXVAR_ADD(rd, outOp);
-        // FIXVAR_ADD_IND(rd, rd, outOp)
         outOp->fixvar_add(&outOp->parsedOpcode.rd, rd, e_rd);
         FIXVAR_ADD(rn, outOp);
         FIXVAR_ADD(rm, outOp);
@@ -154,5 +156,13 @@ public:
             lop.opcode, rd, rn, rm, 0, 0, imm6);
     }
 };
+
+// instSet<cOperand_arm64, val_set_A64_t>* createA64_instSet()
+// {
+//     instSet<cOperand_arm64, val_set_A64_t>* temp = new instSet<cOperand_arm64, val_set_A64_t>();
+//     return temp;
+// }
+
+#include "opcOp_arch.hpp"
 
 #endif

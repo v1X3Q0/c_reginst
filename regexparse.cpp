@@ -3,6 +3,7 @@
 #include <hde.h>
 #include "arm64/opcOp_arch.h"
 #include "amd64/opcOp_arch.h"
+#include "ibeSet.h"
 
 int processreg(std::string inreg)
 {
@@ -80,17 +81,28 @@ void processrega64(std::string inreg)
     PR_ELIFX64(13)
     PR_ELIFX64(14)
     PR_ELIFX64(15)
+    else
+    {
+        if (inreg.substr(0, 4) == "RVAR")
+        {
+            
+        }
+    }
 }
 
 void processfunc(std::string infunc)
 {
+    instSet<cOperand_arm64, val_set_A64_t>* getB = new instSet<cOperand_arm64, val_set_A64_t>();
+
     if (infunc == "b")
     {
         processreg(infunc);
     }
     else if (infunc == "bl")
     {
-        cOperand_arm64::createBL(strtoull(infunc.c_str(), NULL, 0x10));
+        getB->addNewInst(cOperand_arm64::createBL<saveVar_t>(getB.checkOperand(3)));
+
+        getB->addNewInst(cOperand_arm64::createBL(getB. strtoull(infunc.c_str(), NULL, 0x10)));
     }
     else if (infunc == "ldrl")
     {

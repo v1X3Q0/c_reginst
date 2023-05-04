@@ -186,4 +186,6 @@ public:
 
 };
 
+#include "opcOp_arch.hpp"
+
 #endif

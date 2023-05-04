@@ -10,6 +10,13 @@
 #include <bgrep_e.h>
 #include "opcOperand.h"
 
+#if defined(SUPPORT_X86_64)
+#include "amd64/opcOp_arch.h"
+#endif
+#if defined(SUPPORT_AARCH64)
+#include "arm64/opcOp_arch.h"
+#endif
+
 typedef enum
 {
     AARCH64_IBE=1,
@@ -41,7 +48,8 @@ public:
     void clearInternals();
     saveVar_t checkOperand(uint32_t newOperand);
     void addNewInst(cOperand<val_set_t>* newInstruction);
-    int getVar(uint32_t key, size_t* value);
+
+    int getVar(uint32_t key, size_t *value);
     void clearVars();
     int getinstoff(uint32_t index, size_t* instOff);
 
@@ -51,7 +59,11 @@ public:
 protected:
     // base class requirement
     int findPattern_fixed(uint8_t* startAddress_a, size_t sizeSearch, void** resultAddr_a);
+
+    // deprecated
     // opcOperandVar* useKey(uint32_t key);
 };
+
+#include "ibeSet.hpp"
 
 #endif

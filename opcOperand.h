@@ -46,6 +46,7 @@ class cOperand;
 template <typename val_set_t>
 class saveVar
 {
+public:
     val_set_t val_set;
     cOperand<val_set_t>* regRand;
 };
@@ -57,7 +58,7 @@ class cOperand
 {
 protected:
 
-    typedef saveVar<val_set_t> saveVar_t;
+    typedef saveVar<val_set_t> *saveVar_t;
 // if the variable has been fixed
     uint32_t fixvar_unmod;
     uint32_t fixvar_set;
@@ -108,5 +109,7 @@ public:
         fixvar_set = fixvar_unmod;
     }
 };
+
+#include "opcOperand.hpp"
 
 #endif
