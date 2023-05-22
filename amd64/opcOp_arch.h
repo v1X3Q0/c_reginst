@@ -17,6 +17,7 @@ public:
     // constructor for a standard operator
     // initiate it to an initialized fixed variable, that's it.
     cOperand_amd64();
+    cOperand_amd64(uint8_t* curaddr) : cOperand(curaddr) {};
 
     int initme(uint8_t* initdata);
 
@@ -186,6 +187,6 @@ public:
 
 };
 
-#include "opcOp_arch.hpp"
+// #include "opcOp_arch.hpp"
 
-#endif
+#endif // OPCOP_AMD64_H

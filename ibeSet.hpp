@@ -178,12 +178,14 @@ int instSet<cOperand_t, val_set_t>::findPattern_fixed(uint8_t* startAddress_a, s
         {
 #ifdef SUPPORT_AARCH64
         case AARCH64_IBE:
-            tmpInst = cOperand_arm64::createOp<cOperand_arm64>(curAddr);
+            tmpInst = new cOperand_t(curAddr);
+            // tmpInst = cOperand_arm64::createOp<cOperand_arm64>(curAddr);
             break;
 #endif
 #ifdef SUPPORT_X86_64
         case X86_64_IBE:
-            tmpInst = cOperand_amd64::createOp<cOperand_amd64>(curAddr);
+            tmpInst = new cOperand_t(curAddr);
+            // tmpInst = cOperand_amd64::createOp<cOperand_amd64>(curAddr);
             break;
 #endif
         default:

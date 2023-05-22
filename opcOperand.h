@@ -5,7 +5,8 @@
 
 #if defined(SUPPORT_X86_64)
 #include <hde.h>
-#elif defined(SUPPORT_AARCH64)
+#endif
+#if defined(SUPPORT_AARCH64)
 #include <hdeA64.h>
 #endif
 // #include <ibeSet.h>
@@ -51,6 +52,26 @@ public:
     cOperand<val_set_t>* regRand;
 };
 
+template <typename val_set_t>
+class operand_val
+{
+public:
+    bool vari;
+    val_set_t val_set;
+};
+
+template<typename T, typename val_set_t>
+class operand_val_typed : public operand_val<val_set_t>
+{
+public:
+    T storage;
+    operand_val_typed(T tin, bool varin, val_set_t valsetin) : storage(tin)
+    {
+        this->vari = varin;
+        this->val_set = valsetin;
+    }
+};
+
 // typedef saveVar *saveVar_t;
 
 template<typename val_set_t>
@@ -73,6 +94,13 @@ public:
         return cOptmp;
     }
 
+    cOperand() {};
+    cOperand(uint8_t* curAddr)
+    {
+        initme(curAddr);
+    }
+    virtual ~cOperand() {};
+
     virtual int initme(uint8_t* initdata) = 0;
 
     // routine for child to compare against a register
@@ -83,6 +111,7 @@ public:
     virtual size_t getinstsz() = 0;
     // case for adding a fixed size_t 
     // template <typename T>
+
     void fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index);
     void fixvar_add(uint8_t* targetVar, size_t hde_member, val_set_t e_index);
     void fixvar_add(uint16_t* targetVar, size_t hde_member, val_set_t e_index);

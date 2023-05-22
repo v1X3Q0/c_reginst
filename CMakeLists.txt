@@ -40,15 +40,15 @@ set(INCLUDE_LIST_X86 ${INCLUDE_LIST_BASE} ${ANDROID_TOOL_BASE}/common/hde_x86)
 set(LIBRARY_LIST_X86 ${LIBRARY_LIST_BASE} hde_x86)
 
 # architecture libraries
-# add_library(${PROJECT_NAME}_x86 SHARED ${SOURCES_LIST_X86})
-# target_include_directories(${PROJECT_NAME}_x86 PRIVATE ${INCLUDE_LIST_X86})
-# target_link_libraries(${PROJECT_NAME}_x86 PRIVATE ${LIBRARY_LIST_X86})
-# target_compile_definitions(${PROJECT_NAME}_x86 PRIVATE SUPPORT_X86_64=1)
+add_library(${PROJECT_NAME}_x86 STATIC amd64/opcOp_arch.cpp)
+target_include_directories(${PROJECT_NAME}_x86 PRIVATE ${INCLUDE_LIST_X86})
+target_link_libraries(${PROJECT_NAME}_x86 PRIVATE ${LIBRARY_LIST_X86})
+target_compile_definitions(${PROJECT_NAME}_x86 PRIVATE SUPPORT_X86_64=1)
 
-# add_library(${PROJECT_NAME}_A64 SHARED ${SOURCES_LIST_A64})
-# target_include_directories(${PROJECT_NAME}_A64 PRIVATE ${INCLUDE_LIST_A64})
-# target_link_libraries(${PROJECT_NAME}_A64 PRIVATE ${LIBRARY_LIST_A64})
-# target_compile_definitions(${PROJECT_NAME}_A64 PRIVATE SUPPORT_AARCH64=1)
+add_library(${PROJECT_NAME}_A64 STATIC arm64/opcOp_arch.cpp)
+target_include_directories(${PROJECT_NAME}_A64 PRIVATE ${INCLUDE_LIST_A64})
+target_link_libraries(${PROJECT_NAME}_A64 PRIVATE ${LIBRARY_LIST_A64})
+target_compile_definitions(${PROJECT_NAME}_A64 PRIVATE SUPPORT_AARCH64=1)
 
 # add_library(${PROJECT_NAME} SHARED ${SOURCES_LIST_BASE})
 # target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_LIST_BASE}
@@ -57,14 +57,19 @@ set(LIBRARY_LIST_X86 ${LIBRARY_LIST_BASE} hde_x86)
 # target_compile_definitions(${PROJECT_NAME} PRIVATE SUPPORT_AARCH64 SUPPORT_X86_64)
 
 # command line utility for regex instructions
-# add_executable(regexcaller regexcaller.cpp regexparse.cpp)
-# target_include_directories(regexcaller PRIVATE
-#     ${INCLUDE_LIST_BASE}
-#     ${ANDROID_TOOL_BASE}/common/hde_x86
-#     ${ANDROID_TOOL_BASE}/common/hde_armv8
-    
-#     )
-# target_link_libraries(regexcaller ${LIBRARY_LIST_BASE} ${PROJECT_NAME}_x86 ${PROJECT_NAME}_A64 ${PROJECT_NAME})
+add_executable(regexcaller regexcaller.cpp regexparse.cpp)
+target_include_directories(regexcaller PRIVATE
+    ${INCLUDE_LIST_BASE}
+    ${ANDROID_TOOL_BASE}/common/hde_x86
+    ${ANDROID_TOOL_BASE}/common/hde_armv8    
+    )
+
+target_link_libraries(regexcaller PRIVATE
+    localUtil hdeA64 hde_x86 bgrep_e
+    ${PROJECT_NAME}_A64 ${PROJECT_NAME}_x86)
+
+target_compile_definitions(regexcaller PRIVATE SUPPORT_X86_64=1 SUPPORT_AARCH64=1)
+
 # if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 #     find_package(capstone)
 #     target_include_directories(${PROJECT_NAME} PRIVATE ${capstone_INCLUDE_DIRS})

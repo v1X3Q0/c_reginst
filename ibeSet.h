@@ -53,6 +53,8 @@ public:
     void clearVars();
     int getinstoff(uint32_t index, size_t* instOff);
 
+    ~instSet() {};
+
     // deprecated
     // saveVar_t addOperand(uint32_t newOperand, val_set_t val_set, cOperand* regRand);
 
