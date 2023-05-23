@@ -209,6 +209,10 @@ int instSet<cOperand_t, val_set_t>::findPattern_fixed(uint8_t* startAddress_a, s
     {
         FINISH_IF(equalInstSet(&instPatternList, &instSlide) == true);
         clearVars();
+        for (auto i = instPatternList.begin(); i != instPatternList.end(); i++)
+        {
+            (*i)->clearVars();
+        }
 
         if (step > 0)
         {

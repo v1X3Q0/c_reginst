@@ -35,11 +35,44 @@ bool cOperand_arm64::checkHelper(cOperand* targCompare_a)
         parsedOpcode.rd = targCompare->parsedOpcode.rd;
         fixvar_set ^= e_rd;
     }
-    CMPASSIGN_REG(parsedOpcode, targCompare, rn);
+    if (fixvar_set & e_rn)
+    {
+        if (parsedOpcode.rn != targCompare->parsedOpcode.rn)
+        {
+            goto fail;
+        };
+    }
+    else
+    {
+        parsedOpcode.rn = targCompare->parsedOpcode.rn;
+        fixvar_set ^= e_rn;
+    }
     CMPASSIGN_REG(parsedOpcode, targCompare, rm);
     CMPASSIGN_REG(parsedOpcode, targCompare, imms);
-    CMPASSIGN_REG(parsedOpcode, targCompare, immr);
-    CMPASSIGN_REG(parsedOpcode, targCompare, immLarge);
+    if (fixvar_set & e_immr)
+    {
+        if (parsedOpcode.immr != targCompare->parsedOpcode.immr)
+        {
+            goto fail;
+        };
+    }
+    else
+    {
+        parsedOpcode.immr = targCompare->parsedOpcode.immr;
+        fixvar_set ^= e_immr;
+    }
+    if (fixvar_set & e_immLarge)
+    {
+        if (parsedOpcode.immLarge != targCompare->parsedOpcode.immLarge)
+        {
+            goto fail;
+        };
+    }
+    else
+    {
+        parsedOpcode.immLarge = targCompare->parsedOpcode.immLarge;
+        fixvar_set ^= e_immLarge;
+    }
 
     result = true;
 fail:

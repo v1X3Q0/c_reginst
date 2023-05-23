@@ -47,6 +47,8 @@ public:
         return outOp;
     }
 
+    // example:
+    // b 0x4000
     static uint64_t B_inst()
     {
         hdea64_opcode lop = {0};
@@ -61,6 +63,8 @@ public:
             B_inst(), 0, 0, 0, 0, 0, immLarge);
     }
 
+    // example:
+    // bl 0x4000
     static uint64_t BL_inst()
     {
         hdea64_opcode lop = {0};
@@ -75,6 +79,8 @@ public:
             BL_inst(), 0, 0, 0, 0, 0, immLarge);
     }
 
+    // example: technically pc relative
+    // ldr x5, #0x4000
     static uint64_t LDRL_inst()
     {
         hdea64_opcode lop = {0};
@@ -90,10 +96,21 @@ public:
             LDRL_inst(), rt, 0, 0, 0, 0, imm19);
     }
 
+    // example:
+    // ldrb w14, [x10, #0x1]!
     static uint64_t LDRB_inst()
     {
         hdea64_opcode lop = {0};
         ENCODE_OP2_INST(lop, LS, RI, NULL, UIMM);
+        return lop.opcode;
+    }
+
+    // example:
+    // ldr x9, [x9, #0x1c0]
+    static uint64_t LDRRRI_inst()
+    {
+        hdea64_opcode lop = {0};
+        ENCODE_OP2_INST(lop, LS, RI64, NULL, IMM);
         return lop.opcode;
     }
 
@@ -105,6 +122,9 @@ public:
             LDRB_inst(), rt, rn, 0, 0, 0, imm12);
     }
 
+    // example: right now the add and subtract are interchangeable
+    // add x8, x8, #0x1
+    // sub x12, x12, #0x1
     static uint64_t ASI_inst()
     {
         hdea64_opcode lop = {0};
@@ -120,6 +140,8 @@ public:
             ASI_inst(), rd, rn, 0, 0, 0, imm12);
     }
 
+    // example:
+    // adrp x9, 0x40000
     static uint64_t ADRP_inst()
     {
         hdea64_opcode lop = {0};
@@ -134,6 +156,8 @@ public:
             ADRP_inst(), rd, 0, 0, 0, 0, immLarge);
     }
 
+    // example: performs bitwise op on imm
+    // and x8, x9, 0x04
     static uint64_t LI_inst()
     {
         hdea64_opcode lop = {0};
@@ -149,6 +173,8 @@ public:
             LI_inst(), rd, rn, 0, imms, immr, 0);
     }
 
+    // example: i BELIEVE the following:
+    // movz w8, #0x115c
     static uint64_t MWI_inst()
     {
         hdea64_opcode lop = {0};
@@ -164,6 +190,8 @@ public:
             MWI_inst(), rd, 0, 0, 0, 0, imm16);
     }
 
+    // example:
+    // orr x8, x9, x8
     static uint64_t ORRR_inst()
     {
         hdea64_opcode lop = {0};
@@ -171,7 +199,7 @@ public:
         return lop.opcode;
     }
 
-    // or reg, reg
+    // orr reg, reg, reg
     template <typename fv_rd, typename fv_rn, typename fv_imm6, typename fv_rm>
     static cOperand* createORRR(fv_rd rd, fv_rn rn, fv_imm6 imm6, fv_rm rm)
     {
@@ -179,13 +207,16 @@ public:
             ORRR_inst(), rd, rn, rm, 0, 0, imm6);
     }
 
-    // alias for ORR register, where it is mov reg, reg
+    // alias for ORR register, where it is
+    // mov reg, reg
     template <typename fv_rd, typename fv_rm>
     static cOperand* createMOV(fv_rd rd, fv_rm rm)
     {
         return createORRR<fv_rd, size_t, size_t, fv_rm>(rd, -1, 0, rm);
     }
 
+    // example:
+    // 
     static uint64_t ASSR_inst()
     {
         hdea64_opcode lop = {0};

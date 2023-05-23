@@ -299,6 +299,10 @@ void arm64_parseinst(instSetA* getB_in, std::string opcode, std::vector<std::str
     {
         arm64_parseNargs(getB_in, cOperand_arm64::LDRB_inst(), operandlist, variable_keys, 3, e_rd, e_rn, e_immLarge);
     }
+    else if (opcode == "ldrrri")
+    {
+        arm64_parseNargs(getB_in, cOperand_arm64::LDRRRI_inst(), operandlist, variable_keys, 3, e_rd, e_rn, e_immLarge);
+    }
     else if (opcode == "asi")
     {
         arm64_parseNargs(getB_in, cOperand_arm64::ASI_inst(), operandlist, variable_keys, 3, e_rd, e_rn, e_immLarge);
