@@ -9,7 +9,7 @@
 
 void usage(const char* arg)
 {
-    printf("%s: -i inputfile -e expr_file -r raw_expr -s skip -n numbytes", arg);
+    printf("%s: -i inputfile -e expr_file -r raw_expr -s skip -n numbytes -a all\n", arg);
     exit(1);
 }
 
@@ -60,8 +60,10 @@ int main(int argc, char** argv)
         usage(argv[0]);
     }
 
-    infile = "/Users/mariomain/projects/huawei/mate20/lya-l29_9.1.0.300/kernel_extracted.bin";
-    expr_raw = "adrp $reg2, $const2; ldrrri $reg2, $reg2, $const1; adrp $reg3, $const3; ldrrri $reg3, $reg3, $const4;";
+    // some sample infile's and args
+    // infile = "/Users/mariomain/projects/huawei/mate20/lya-l29_9.1.0.300/kernel_extracted.bin";
+    // infile="/Users/mariomain/projects/huawei/p50/_BOOT.img.extracted/1000";
+    // expr_raw = "adrp $reg2, $const2; ldrrri $reg2, $reg2, $const1; adrp $reg3, $const3; ldrrri $reg3, $reg3, $const4;";
     SAFE_BAIL(block_grab(infile, &searchbase, &searchsz) == -1);
     if (searchszin != 0)
     {
@@ -89,5 +91,11 @@ int main(int argc, char** argv)
     
 
 fail:
+    SAFE_FREE(searchbase);
+    if (expr_file != 0)
+    {
+        SAFE_FREE(expr_raw);
+    }
+    SAFE_DEL(getB);
     return 0;
 }
