@@ -4,6 +4,9 @@
 #include <vector>
 #include <map>
 #include <stdlib.h>
+#include <algorithm>
+#include <array>
+
 #include <hdeA64.h>
 #include <hde.h>
 #include "arm64/opcOp_arch.h"

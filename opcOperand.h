@@ -72,27 +72,35 @@ public:
     }
 };
 
-// typedef saveVar *saveVar_t;
+// int initme_f(val_set_X86_t val_set_X86, uint8_t* initdata)
+// {
+//     return parseInst(initdata, &parsedOpcode);
+// }
+
+// int initme_f(val_set_A64_t val_set_A64, uint8_t* initdata)
+// {
+//     return parseByEnc(*(uint32_t*)initdata, &parsedOpcode);
+// }
 
 template<typename val_set_t>
 class cOperand
 {
 protected:
 
-    typedef saveVar<val_set_t> *saveVar_t;
 // if the variable has been fixed
     uint32_t fixvar_unmod;
     uint32_t fixvar_set;
 public:
     // hde_t parsedOpcode;
+    typedef saveVar<val_set_t> *saveVar_t;
 
-    template <typename opType_t>
-    static cOperand* createOp(uint8_t* curAddr)
-    {
-        opType_t* cOptmp = new opType_t;
-        cOptmp->initme(curAddr);
-        return cOptmp;
-    }
+    // template <typename opType_t>
+    // static cOperand* createOp(uint8_t* curAddr)
+    // {
+    //     opType_t* cOptmp = new opType_t;
+    //     cOptmp->initme(curAddr);
+    //     return cOptmp;
+    // }
 
     cOperand() {};
     cOperand(uint8_t* curAddr)
@@ -112,23 +120,25 @@ public:
     // case for adding a fixed size_t 
     // template <typename T>
 
-    void fixvar_add(size_t* targetVar, size_t hde_member, val_set_t e_index);
     void fixvar_add(uint8_t* targetVar, size_t hde_member, val_set_t e_index);
     void fixvar_add(uint16_t* targetVar, size_t hde_member, val_set_t e_index);
-    void fixvar_add(uint32_t* targetVar, size_t hde_member, val_set_t e_index);
     void fixvar_add(int32_t* targetVar, size_t hde_member, val_set_t e_index);
+    void fixvar_add(uint32_t* targetVar, size_t hde_member, val_set_t e_index);
     void fixvar_add(int64_t* targetVar, size_t hde_member, val_set_t e_index);
+    void fixvar_add(uint64_t* targetVar, size_t hde_member, val_set_t e_index);
+
 #ifdef __APPLE__
     void fixvar_add(long* targetVar, size_t hde_member, val_set_t e_index);
 #endif
     // case for adding a variable size_t, inwhich we just are adding a * to a **
     // template<typename T>
-    void fixvar_add(size_t* targetVar, saveVar_t var_member, val_set_t e_index);
     void fixvar_add(uint8_t* targetVar, saveVar_t var_member, val_set_t e_index);
     void fixvar_add(uint16_t* targetVar, saveVar_t var_member, val_set_t e_index);
-    void fixvar_add(uint32_t* targetVar, saveVar_t var_member, val_set_t e_index);
     void fixvar_add(int32_t* targetVar, saveVar_t var_member, val_set_t e_index);
+    void fixvar_add(uint32_t* targetVar, saveVar_t var_member, val_set_t e_index);
     void fixvar_add(int64_t* targetVar, saveVar_t var_member, val_set_t e_index);
+    void fixvar_add(uint64_t* targetVar, saveVar_t var_member, val_set_t e_index);
+
 #ifdef __APPLE__
     void fixvar_add(long* targetVar, saveVar_t var_member, val_set_t e_index);
 #endif
