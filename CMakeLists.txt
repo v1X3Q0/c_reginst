@@ -1,8 +1,14 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.5.0)
 project(c_reginst VERSION 0.1.0)
 
 if(NOT DEFINED ANDROID_TOOL_BASE)
-    message(FATAL_ERROR "need ANDROID_TOOL_BASE")
+    set(ANDROID_TOOL_BASE ${CMAKE_CURRENT_SOURCE_DIR})
+    message(WARNING "set ANDROID_TOOL_BASE to ${ANDROID_TOOL_BASE}")
+
+    add_subdirectory(common/hde_armv8)
+    add_subdirectory(common/hde_x86)
+    add_subdirectory(common/local_util)
+    add_subdirectory(common/bgrep_c)
 endif()
 
 # ===========================================
