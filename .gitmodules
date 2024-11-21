@@ -1,0 +1,12 @@
+[submodule "common/hde_x86"]
+	path = common/hde_x86
+	url = https://github.com/v1X3Q0/hde_x86.git
+[submodule "common/hde_armv8"]
+	path = common/hde_armv8
+	url = https://github.com/v1X3Q0/hde_armv8.git
+[submodule "common/local_util"]
+	path = common/local_util
+	url = https://github.com/v1X3Q0/local_util.git
+[submodule "common/bgrep_c"]
+	path = common/bgrep_c
+	url = https://github.com/v1X3Q0/bgrep_c.git
