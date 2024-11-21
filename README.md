@@ -1,29 +1,15 @@
-# README #
+# c_reginst
 
-This README would normally document whatever steps are necessary to get your application up and running.
+a library for building regular expressions for arm64 and x86_64 instructions.
 
-### What is this repository for? ###
+## build
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+build instructions below
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+```bash
+git submodule update --init --depth 1
+mkdir build-out
+cd build-out
+cmake ..
+make
+```
