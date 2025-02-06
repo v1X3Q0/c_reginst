@@ -258,6 +258,8 @@ int assign_args(instSetA* getB_in, std::vector<std::string>* variable_keys, std:
         }
         *curopval_out = curopval;
     }
+
+    return 0;
 }
 
 void arm64_parseNargs(instSetA* getB_in, uint64_t opcode, std::vector<std::string>* operandlist, std::vector<std::string>* variable_keys, int argcount, ...)
