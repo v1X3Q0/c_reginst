@@ -9,6 +9,20 @@ set(TARGET_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
+set(TARGET_LINKDIRS )
+
+set(TARGET_LIBS
+    localUtil hdeA64 hde_x86 bgrep_e
+    ${PROJECT_NAME}_A64 ${PROJECT_NAME}_x86
+    )
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    find_package(getopt_for_windows)
+    list(APPEND TARGET_INCLUDES ${getopt_for_windows_INCLUDE_DIR})
+    list(APPEND TARGET_LINKDIRS ${getopt_for_windows_LIB_DIR})
+    list(APPEND TARGET_LIBS getopt_for_windows_static)
+endif()
+
 # command line utility for regex instructions
 add_executable(regexcaller regexcaller.cpp regexparse.cpp)
 
@@ -16,10 +30,9 @@ target_compile_definitions(regexcaller PRIVATE SUPPORT_X86_64=1 SUPPORT_AARCH64=
 
 target_include_directories(regexcaller PRIVATE ${TARGET_INCLUDES})
 
-target_link_libraries(regexcaller PRIVATE
-    localUtil hdeA64 hde_x86 bgrep_e
-    ${PROJECT_NAME}_A64 ${PROJECT_NAME}_x86)
+target_link_directories(regexcaller PRIVATE ${TARGET_LINKDIRS})
 
+target_link_libraries(regexcaller PRIVATE ${TARGET_LIBS})
 
 # if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 #     find_package(capstone)
