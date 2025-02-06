@@ -14,12 +14,12 @@ cOperand_amd64::cOperand_amd64()
     memset(&parsedOpcode, 0, sizeof(hde64s_t));
 }
 
-// #if defined(__linux__)
-// template<>
-// int cOperand<val_set_X86_t>::initme(unsigned char*)
-// #else
+#if defined(_WIN32)
+template<>
+int cOperand<val_set_X86_t>::initme(unsigned char*)
+#else
 int cOperand_amd64::initme(uint8_t* initdata)
-// #endif
+#endif
 {
     return parseInst(initdata, &parsedOpcode);
 }
