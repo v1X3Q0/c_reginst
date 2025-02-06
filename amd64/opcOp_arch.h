@@ -4,6 +4,11 @@
 #include <hde.h>
 #include "../opcOperand.h"
 
+#define initme_os \
+{ \
+    return parseInst(initdata, &parsedOpcode); \
+}
+
 
 class cOperand_amd64 : public cOperand<val_set_X86_t>
 {
@@ -19,7 +24,12 @@ public:
     cOperand_amd64();
     cOperand_amd64(uint8_t* curaddr) : cOperand(curaddr) {};
 
-    int initme(uint8_t* initdata);
+    int initme(uint8_t* initdata)
+#if !defined(_WIN32)
+    ;
+#else
+    initme_os
+#endif
 
     size_t getinstsz();
     bool checkHelper(cOperand* targCompare);
