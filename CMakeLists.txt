@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.15.0)
 project(c_reginst VERSION 0.1.0)
 
 if(NOT DEFINED ANDROID_TOOL_BASE)
